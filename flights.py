@@ -15,7 +15,7 @@ def get_locations(city_from, language,location_type, no_results):
     params = {
     'term':city_from, #This is what will show in the search tab
     'locale': language, #Language of search no_results
-    'location_type': 'airport'# Type of output, e.g. if this is airport, give airport code
+    'location_type': 'airport', # Type of output, e.g. if this is airport, give airport code
     'no_results': '10' # Number of results this can be fixed
     }
 
