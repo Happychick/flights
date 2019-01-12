@@ -7,12 +7,17 @@ app = Flask(__name__)
 
 # In essence here I just want the user to type in something for SFO
 
+# All other variables are specified in the html, this one is fixed
+
+partner = 'picky'
+
 # Get data
 def get_flights(city_from, date_from,date_to):
     params = {
     'flyFrom': city_from,
     'dateFrom': date_from,
-    'dateTo':date_to
+    'dateTo':date_to,
+    'partner': partner
     }
     # Get data
     resp=requests.get('https://api.skypicker.com/flights', params = params)
