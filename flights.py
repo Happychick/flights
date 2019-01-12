@@ -5,6 +5,8 @@ app = Flask(__name__)
 # In essence you are developing web pages
 # The name of the app will be run on the flask server
 
+import json
+import pandas as pd
 # All other variables are specified in the html, this one is fixed
 # This is for showing results, not entirely sure how that works
 partner = 'picky'
