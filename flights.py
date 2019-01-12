@@ -11,17 +11,22 @@ app = Flask(__name__)
 # For now I will hold the language of the search fixed
 language = 'en-US'
 
-def get_locations(city_from, language,location_type, no_results):
+def get_locations(city_from):
     params = {
     'term':city_from, #This is what will show in the search tab
-    'locale': language, #Language of search no_results
-    'location_type': 'airport', # Type of output, e.g. if this is airport, give airport code
-    'no_results': '10' # Number of results this can be fixed
+    'locale':'en-US', #Language of search no_results
+    'location_type': 'airport',# Type of output, e.g. if this is airport, give airport code
+    'no_results':'10' # Number of results this can be fixed
     }
 
-    # What fields from the json do I want returned? Notably airport code
-    location_code_field = ['code', 'name']
+    # Extract location infromation out using location API
+    resp=requests.get('https://api.skypicker.com/locations', params = params)
 
+    # Parse json into dictionary
+    results= resp.json()
+
+    # What fields from the json do I want returned, It's both but for different purposes
+    location_code_field = ['code', 'name']
     location_code = pd.DataFrame(results['locations'], columns=location_code_field)
 
     return location_code
