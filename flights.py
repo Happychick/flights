@@ -5,22 +5,23 @@ app = Flask(__name__)
 # In essence you are developing web pages
 # The name of the app will be run on the flask server
 
-# In essence here I just want the user to type in something for SFO
+# All other variables are specified in the html, this one is fixed
+# This is for showing results, not entirely sure how that works
+partner = 'picky'
 
-# Get airport code for flight search using locations API
-# For now I will hold the language of the search fixed
-language = 'en-US'
+# Get data
+def get_flights(city_from, date_from,date_to):
 
-def get_locations(city_from):
-    params = {
+    # First get location
+    params_loc = {
     'term':city_from, #This is what will show in the search tab
     'locale':'en-US', #Language of search no_results
-    'location_type': 'airport',# Type of output, e.g. if this is airport, give airport code
+    'location_types':'airport',# Type of output, e.g. if this is airport, give airport code
     'no_results':'10' # Number of results this can be fixed
     }
 
     # Extract location infromation out using location API
-    resp=requests.get('https://api.skypicker.com/locations', params = params)
+    resp=requests.get('https://api.skypicker.com/locations', params = params_loc)
 
     # Parse json into dictionary
     results= resp.json()
@@ -29,19 +30,16 @@ def get_locations(city_from):
     location_code_field = ['code', 'name']
     location_code = pd.DataFrame(results['locations'], columns=location_code_field)
 
-    return location_code
+    # Get the code that matches city from
+    # For now, match it to first result (Correct later for any!)
+    if len(location_code['code']) > 1:
+        city_id = location_code['code'][0]
+    else:
+        city_id = location_code['code']
 
-# Get the code that matches city from
-city_from = location_code['code']
-
-# All other variables are specified in the html, this one is fixed
-# This is for showing results, not entirely sure how that works
-partner = 'picky'
-
-# Get data
-def get_flights(city_from, date_from,date_to):
+    # Use the code to get the flights
     params = {
-    'flyFrom': city_from, #Use the code from the location match above
+    'flyFrom': city_id, #Use the code from the location match above
     'dateFrom': date_from,
     'dateTo':date_to,
     'partner': partner
@@ -50,6 +48,7 @@ def get_flights(city_from, date_from,date_to):
     resp=requests.get('https://api.skypicker.com/flights', params = params)
     # Parse json into dictionary
     flights=resp.json()
+
     return flights
 
 # This actually extracts the flight prices for each desitnation city
@@ -83,6 +82,7 @@ def flight_output(flight1, flight2):
 # Return the result city and price
 def get_itinerary(city1,city2,date_from,date_to):
     # Extract user defined info for input
+
     flight1=get_flights(city1,date_from,date_to)
     flight2=get_flights(city2,date_from,date_to)
     flight_matches = flight_output(flight1, flight2)
