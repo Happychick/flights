@@ -7,14 +7,36 @@ app = Flask(__name__)
 
 # In essence here I just want the user to type in something for SFO
 
-# All other variables are specified in the html, this one is fixed
+# Get airport code for flight search using locations API
+# For now I will hold the language of the search fixed
+language = 'en-US'
 
+def get_locations(city_from, language,location_type, no_results):
+    params = {
+    'term':city_from, #This is what will show in the search tab
+    'locale': language, #Language of search no_results
+    'location_type': 'airport'# Type of output, e.g. if this is airport, give airport code
+    'no_results': '10' # Number of results this can be fixed
+    }
+
+    # What fields from the json do I want returned? Notably airport code
+    location_code_field = ['code', 'name']
+
+    location_code = pd.DataFrame(results['locations'], columns=location_code_field)
+
+    return location_code
+
+# Get the code that matches city from
+city_from = location_code['code']
+
+# All other variables are specified in the html, this one is fixed
+# This is for showing results, not entirely sure how that works
 partner = 'picky'
 
 # Get data
 def get_flights(city_from, date_from,date_to):
     params = {
-    'flyFrom': city_from,
+    'flyFrom': city_from, #Use the code from the location match above
     'dateFrom': date_from,
     'dateTo':date_to,
     'partner': partner
