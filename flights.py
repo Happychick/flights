@@ -11,15 +11,16 @@ import pandas as pd
 # This is for showing results, not entirely sure how that works
 partner = 'picky'
 
-# Get data
-def get_flights(city_from, date_from,date_to):
+# Mafe a function for each part
+# This is the location function
+
+def get_locations(city_from):
 
     # First get location
     params_loc = {
     'term':city_from, #This is what will show in the search tab
     'locale':'en-US', #Language of search no_results
     'location_types':'airport',# Type of output, e.g. if this is airport, give airport code
-    'no_results':'10' # Number of results this can be fixed
     }
 
     # Extract location infromation out using location API
@@ -38,6 +39,14 @@ def get_flights(city_from, date_from,date_to):
         city_id = location_code['code'][0]
     else:
         city_id = location_code['code']
+
+    return city_id
+
+
+# Get data
+def get_flights(city_from, date_from,date_to):
+
+    city_id = get_locations(city_from)
 
     # Use the code to get the flights
     params = {
@@ -81,6 +90,21 @@ def flight_output(flight1, flight2):
 
     return flight_matches
 
+#Get link to flights
+def get_links(city_from,min_price):
+    # Parameters needed for deeplink
+    params_loc = {'origin':city_from,
+                  'destination':min_price,
+                  'affilid':'test',
+                  'lang':'en'}
+
+    # Extract links information
+    resp=requests.get('http://www.kiwi.com/deep',params = params_loc)
+
+    result = print(resp.url)
+
+    return result
+
 # Return the result city and price
 def get_itinerary(city1,city2,date_from,date_to):
 
@@ -99,7 +123,11 @@ def get_itinerary(city1,city2,date_from,date_to):
 
     min_price = min(total_prices, key=total_prices.get)
 
-    return {'city': min_price, 'price': total_prices[min_price]}
+    #Links to actual flights
+    link1 = get_links(city1,min_price)
+    link2 = get_links(city2,min_price)
+
+    return {'city': min_price, 'price': total_prices[min_price], 'Flight 1': link1, 'Flight 2':link2}
 
 # One call is to collect data, the other one posts it
 # First time we say methods, next only method, order doesn't matter
