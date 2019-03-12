@@ -127,7 +127,7 @@ def get_itinerary(city1,city2,date_from,date_to):
     link1 = get_links(city1,min_price)
     link2 = get_links(city2,min_price)
 
-    return {'city': min_price, 'price': total_prices[min_price]}, link1, link2
+    return {'city': min_price, 'price': total_prices[min_price] 'Flight 1':link1, 'Flight 2':link2}
 
 # One call is to collect data, the other one posts it
 # First time we say methods, next only method, order doesn't matter
