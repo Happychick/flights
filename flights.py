@@ -101,7 +101,9 @@ def get_links(city_from,min_price):
     # Extract links information
     resp=requests.get('http://www.kiwi.com/deep',params = params_loc)
 
-    result = print(resp.url)
+    result = resp.url
+
+    print(result)
 
     return result
 
