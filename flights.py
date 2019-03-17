@@ -58,7 +58,7 @@ def get_locations_city(city_from):
     location_code_country = pd.DataFrame(results['locations'], columns=['code'])
 
     code_id = []
-     for i in range(len(location_code_city)):
+    for i in range(len(location_code_city)):
         if location_code_city['country'][i]['code'] == location_code_country['code'][0]:
             code_id.append(location_code_city['code'][i])
         else: pass
