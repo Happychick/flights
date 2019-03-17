@@ -14,13 +14,35 @@ partner = 'picky'
 # Mafe a function for each part
 # This is the location function
 
-def get_locations(city_from):
+def get_locations_city(city_from):
 
-    # First get location
+    # Split string into list of variables
+    loc = city_from.split(',')
+
+    # First get city info
     params_loc = {
-    'term':city_from, #This is what will show in the search tab
-    'locale':'en-US', #Language of search no_results
-    'location_types':'airport',# Type of output, e.g. if this is airport, give airport code
+        'term':city_from, #This is what will show in the search tab
+        'locale':'en-US', #Language of search no_results
+        'location_types':'city',
+        'limit':1
+        }
+
+        # Extract location infromation out using location API
+        resp=requests.get('https://api.skypicker.com/locations', params = params_loc)
+
+        # Parse json into dictionary
+        results= resp.json()
+
+    # What fields from the json do I want returned, It's both but for different purposes
+    location_code_city = pd.DataFrame(results['locations'], columns=['code','country'])
+
+
+    # First get city info
+    params_loc = {
+        'term':country, #This is what will show in the search tab
+        'locale':'en-US', #Language of search no_results
+        'location_types':'country',
+        'limit':1
     }
 
     # Extract location infromation out using location API
@@ -30,17 +52,17 @@ def get_locations(city_from):
     results= resp.json()
 
     # What fields from the json do I want returned, It's both but for different purposes
-    location_code_field = ['code', 'name']
-    location_code = pd.DataFrame(results['locations'], columns=location_code_field)
+    location_code_country = pd.DataFrame(results['locations'], columns=['code'])
 
-    # Get the code that matches city from
-    # For now, match it to first result (Correct later for any!)
-    if len(location_code['code']) > 1:
-        city_id = location_code['code'][0]
-    else:
-        city_id = location_code['code']
+    code_id = []
 
-    return city_id
+
+    for i in range(len(location_code_city)):
+        if location_code_city['country'][i]['code'] == location_code_country['code'][0]:
+            code_id.append(location_code_city['code'][i])
+        else: pass
+
+    return code_id
 
 
 # Get data
