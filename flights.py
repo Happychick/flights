@@ -68,7 +68,7 @@ def get_locations_city(city_from):
 # Get data
 def get_flights(city_from, date_from,date_to):
 
-    city_id = get_locations(city_from)
+    city_id = get_locations_city(city_from)
 
     # Use the code to get the flights
     params = {
