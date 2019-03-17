@@ -19,6 +19,10 @@ def get_locations_city(city_from):
     # Split string into list of variables
     loc = city_from.split(',')
 
+    #Define variables
+    city_from = loc[0]
+    country = loc[1]
+
     # First get city info
     params_loc = {
         'term':city_from, #This is what will show in the search tab
@@ -27,11 +31,10 @@ def get_locations_city(city_from):
         'limit':1
         }
 
-        # Extract location infromation out using location API
-        resp=requests.get('https://api.skypicker.com/locations', params = params_loc)
-
-        # Parse json into dictionary
-        results= resp.json()
+    # Extract location infromation out using location API
+    resp=requests.get('https://api.skypicker.com/locations', params = params_loc)
+    # Parse json into dictionary
+    results= resp.json()
 
     # What fields from the json do I want returned, It's both but for different purposes
     location_code_city = pd.DataFrame(results['locations'], columns=['code','country'])
@@ -55,9 +58,7 @@ def get_locations_city(city_from):
     location_code_country = pd.DataFrame(results['locations'], columns=['code'])
 
     code_id = []
-
-
-    for i in range(len(location_code_city)):
+     for i in range(len(location_code_city)):
         if location_code_city['country'][i]['code'] == location_code_country['code'][0]:
             code_id.append(location_code_city['code'][i])
         else: pass
