@@ -70,13 +70,15 @@ def get_locations_city(city_from):
 def get_flights(city_from, date_from,date_to):
 
     city_id = get_locations_city(city_from)
+    one_for_city = '1'
 
     # Use the code to get the flights
     params = {
     'flyFrom': city_id, #Use the code from the location match above
     'dateFrom': date_from,
     'dateTo':date_to,
-    'partner': partner
+    'partner': partner,
+    'one_for_city':one_for_city
     }
     # Get data
     resp=requests.get('https://api.skypicker.com/flights', params = params)
