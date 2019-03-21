@@ -57,10 +57,10 @@ def get_locations_city(city_from):
     # What fields from the json do I want returned, It's both but for different purposes
     location_code_country = pd.DataFrame(results['locations'], columns=['code'])
 
-    code_id = []
+
     for i in range(len(location_code_city)):
         if location_code_city['country'][i]['code'] == location_code_country['code'][0]:
-            code_id.append(location_code_city['code'][i])
+            code_id = location_code_city['code'][i]
         else: pass
 
     return code_id
@@ -116,10 +116,12 @@ def flight_output(flight1, flight2):
     return flight_matches
 
 #Get link to flights
-def get_links(city_from,min_price):
+def get_links(city_from,min_price,date_from,date_to):
     # Parameters needed for deeplink
     params_loc = {'origin':city_from,
                   'destination':min_price,
+                  'departure':date_from,
+                  'return':date_to,
                   'affilid':'test',
                   'lang':'en'}
 
@@ -127,8 +129,6 @@ def get_links(city_from,min_price):
     resp=requests.get('http://www.kiwi.com/deep',params = params_loc)
 
     result = resp.url
-
-    print(result)
 
     return result
 
@@ -151,8 +151,8 @@ def get_itinerary(city1,city2,date_from,date_to):
     min_price = min(total_prices, key=total_prices.get)
 
     #Links to actual flights
-    link1 = get_links(city1,min_price)
-    link2 = get_links(city2,min_price)
+    link1 = get_links(city1,min_price,date_from,date_to)
+    link2 = get_links(city2,min_price,date_from,date_to)
 
     return {'city': min_price, 'price': total_prices[min_price], 'Flight 1':link1, 'Flight 2':link2}
 
