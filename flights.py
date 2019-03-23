@@ -7,6 +7,8 @@ app = Flask(__name__)
 
 import json
 import pandas as pd
+from datetime import datetime
+
 # All other variables are specified in the html, this one is fixed
 # This is for showing results, not entirely sure how that works
 partner = 'picky'
@@ -72,11 +74,15 @@ def get_flights(city_from, date_from,date_to):
     city_id = get_locations_city(city_from)
     one_for_city = '1'
 
+    #Ensure that date is captured in good formate
+    dt = datetime.datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%y')
+    df = datetime.datetime.strptime(date_from, '%Y-%m-%d').strftime('%d/%m/%y')
+
     # Use the code to get the flights
     params = {
     'flyFrom': city_id, #Use the code from the location match above
-    'dateFrom': date_from,
-    'dateTo':date_to,
+    'dateFrom': df,
+    'dateTo':dt
     'partner': partner,
     'one_for_city':one_for_city
     }
