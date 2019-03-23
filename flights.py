@@ -22,12 +22,12 @@ def get_locations_city(city_from):
     loc = city_from.split(',')
 
     #Define variables
-    city_from = loc[0]
+    city = loc[0]
     country = loc[1]
 
     # First get city info
     params_loc = {
-        'term':city_from, #This is what will show in the search tab
+        'term':city, #This is what will show in the search tab
         'locale':'en-US', #Language of search no_results
         'location_types':'city',
         'limit':1
