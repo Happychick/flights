@@ -82,7 +82,7 @@ def get_flights(city_from, date_from,date_to):
     params = {
     'flyFrom': city_id, #Use the code from the location match above
     'dateFrom': df,
-    'dateTo':dt
+    'dateTo':dt,
     'partner': partner,
     'one_for_city':one_for_city
     }
