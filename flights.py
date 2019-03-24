@@ -75,8 +75,8 @@ def get_flights(city_from, date_from,date_to):
     one_for_city = '1'
 
     #Ensure that date is captured in good formate
-    dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%y')
-    df = datetime.strptime(date_from, '%Y-%m-%d').strftime('%d/%m/%y')
+    #dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%y')
+    #df = datetime.strptime(date_from, '%Y-%m-%d').strftime('%d/%m/%y')
 
     # Use the code to get the flights
     params = {
