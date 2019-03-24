@@ -5,7 +5,11 @@
          {% for key, value in result.items() %}
             <tr>
                <th> {{ key }} </th>
-               <td> {{ value }} </td>
+               <td> {%- if loop.index <= 2 %}
+                    {{ value }}
+                    {% else %}
+                    <a href="{{ value.href }}">This is your flight </a>
+                    {% endif %}</td>
             </tr>
          {% endfor %}
       </table>
