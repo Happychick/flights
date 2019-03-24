@@ -8,6 +8,7 @@ app = Flask(__name__)
 import json
 import pandas as pd
 from datetime import datetime
+from collections import defaultdict
 
 # All other variables are specified in the html, this one is fixed
 # This is for showing results, not entirely sure how that works
@@ -94,49 +95,39 @@ def get_flights(city_from, date_from,date_to):
     return flights
 
 # This actually extracts the flight prices for each desitnation city
+# Step 2: Add the deeplink for the flight
+
 def flight_output(flight1, flight2):
-    flight_matches = {}
+    flight_matches = defaultdict(dict)
 
     for flight in flight1['data']:
         cityto = flight['cityTo']
         cityfrom = flight['cityFrom']
         price = flight['price']
-        #print(cityfrom,cityto,price)
-        try:
-            if len(flight_matches[cityto]) > 1:
-                pass
-        except:
-            flight_matches[cityto] = [price]
+        link = flight['deep_link']
+        # Check if we already have the city - if yes, skip, if not add
+        # To nested dictionary
+        if cityto in flight_matches == True:
+            pass
+        else:
+            flight_matches[cityto]['price'] = [price]
+            flight_matches[cityto]['flight'] = [link]
 
     for flight in flight2['data']:
         cityto = flight['cityTo']
         cityfrom = flight['cityFrom']
         price = flight['price']
-        #print(cityfrom,cityto,price)
+        link = flight['deep_link']
+        # If you ask for a key that isn't in the dictionary you get an error
         try:
-            if len(flight_matches[cityto]) == 1:
-                flight_matches[cityto].append(price)
+            if len(flight_matches[cityto]['price']) == 1:
+                flight_matches[cityto]['price'].append(price)
+                flight_matches[cityto]['flight'].append(link)
         except:
             pass
 
     return flight_matches
 
-#Get link to flights
-def get_links(city_from,min_price,date_from,date_to):
-    # Parameters needed for deeplink
-    params_loc = {'origin':city_from,
-                  'destination':min_price,
-                  'departure':date_from,
-                  'return':date_to,
-                  'affilid':'test',
-                  'lang':'en'}
-
-    # Extract links information
-    resp=requests.get('http://www.kiwi.com/deep',params = params_loc)
-
-    result = resp.url
-
-    return result
 
 # Return the result city and price
 def get_itinerary(city1,city2,date_from,date_to):
@@ -157,8 +148,8 @@ def get_itinerary(city1,city2,date_from,date_to):
     min_price = min(total_prices, key=total_prices.get)
 
     #Links to actual flights
-    link1 = get_links(city1,min_price,date_from,date_to)
-    link2 = get_links(city2,min_price,date_from,date_to)
+    link1 = flight_matches[min_price]['flight'][0]
+    link2 = flight_matches[min_price]['flight'][1]
 
     return {'city': min_price, 'price': total_prices[min_price], 'Flight 1':link1, 'Flight 2':link2}
 
