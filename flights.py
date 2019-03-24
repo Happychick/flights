@@ -141,9 +141,9 @@ def get_itinerary(city1,city2,date_from,date_to):
     # Get the final output
     total_prices = {}
 
-    for i in flight_matches:
-        if len(flight_matches[i]) == 2:
-            total_prices[i] = sum(flight_matches[i])
+    for i in flight_matches['price']:
+        if len(flight_matches[i]['price']) == 2:
+            total_prices[i] = sum(flight_matches[i]['price'])
 
     min_price = min(total_prices, key=total_prices.get)
 
