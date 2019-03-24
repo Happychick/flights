@@ -166,8 +166,9 @@ def index():
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
-        results = get_itinerary(city1,city2,date_from,date_to)
-        return str(results)
+        dict = get_itinerary(city1,city2,date_from,date_to)
+        #return str(dict)
+        return render_template("results.html", result = dict)
 
 
 #This means you are running a program
