@@ -24,6 +24,11 @@
   color: white;
 }
 </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+crossorigin="anonymous">
 </head>
    <body>
       <table id="results">
@@ -33,7 +38,7 @@
                <td> {%- if loop.index <= 2 %}
                     {{ value }}
                     {% else %}
-                    <a href="{{ value }}" target="_blank">This is your flight </a>
+                    <a href="{{ value }}" target="_blank"><i class='fas fa-plane' style='font-size:24px'></i></a>
                     {% endif %}</td>
             </tr>
          {% endfor %}
