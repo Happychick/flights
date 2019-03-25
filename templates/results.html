@@ -23,6 +23,21 @@
   background-color: #8c52ff;
   color: white;
 }
+
+a:link, a:visited {
+  background-color: grey;
+  color: white;
+  padding: 15px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font: normal normal 400 normal 16px / 30.6px Karla, Arial, Helvetica, sans-serif;
+}
+
+a:hover, a:active {
+  background-color: black;
+}
+
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
@@ -38,7 +53,7 @@ crossorigin="anonymous">
                <td> {%- if loop.index <= 2 %}
                     {{ value }}
                     {% else %}
-                    <a href="{{ value }}" target="_blank"><i class='fas fa-plane' style='font-size:24px'></i></a>
+                    <a href="{{ value }}" target="_blank">Book <i class='fas fa-plane' style='font-size:24px'></i></a>
                     {% endif %}</td>
             </tr>
          {% endfor %}
