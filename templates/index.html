@@ -763,6 +763,11 @@
     background-color: DodgerBlue !important;
     color: #ffffff;
   }
+
+  /*Puts a shadow box behind an invalid entry*/
+  input:invalid {
+  box-shadow: 0 0 5px 1px #8c52ff;
+}
 </style>
 
 </head>
@@ -787,18 +792,18 @@
       </p>
     <p id="P_16">
         <label id="LABEL_17">
-				City, Country (required)<br id="BR_18" /> <span id="SPAN_19"><input type="text" name="city2" size="40" id="INPUT_20" /></span>
+				City, Country (required)<br id="BR_18" /> <span id="SPAN_19"><input type="text" name="city2" required size="40" id="INPUT_20" /></span>
         </label>
     </p>
     </div>
 		<p id="P_21">
 			<label id="LABEL_22">
-				Date From (required)<br id="BR_23" /> <span id="SPAN_24"><input type="text" name="date_from" id="INPUT_25" /></span>
+				Date From (required)<br id="BR_23" /> <span id="SPAN_24"><input type="text" name="date_from" required id="INPUT_25" /></span>
 			</label>
 		</p>
 		<p id="P_26">
 			<label id="LABEL_27">
-				Date From (required)<br id="BR_28" /> <span id="SPAN_29"><input type="text" name="date_to" id="INPUT_30" /></span>
+				Date From (required)<br id="BR_28" /> <span id="SPAN_29"><input type="text" name="date_to" required id="INPUT_30" /></span>
 			</label>
 		</p>
 		<p id="P_31">
