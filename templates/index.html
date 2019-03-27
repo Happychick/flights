@@ -764,10 +764,24 @@
     color: #ffffff;
   }
 
-  /*Puts a shadow box behind an invalid entry*/
-  input:invalid {
-  box-shadow: 0 0 5px 1px #8c52ff;
-}
+  /* This is the style of our error messages */
+  .error {
+    width  : 100%;
+    padding: 0;
+
+    font-size: 80%;
+    color: white;
+    background-color: #900;
+    border-radius: 0 0 5px 5px;
+
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .error.active {
+    padding: 0.3em;
+  }
+
 </style>
 
 </head>
@@ -787,7 +801,8 @@
     <div class="autocomplete" style="width:300px;">
     <p id="P_11">
         <label id="LABEL_12">
-          City, Country (required)<br id="BR_13" /> <span id="SPAN_14"><input type="text" name="city1" required size="40" id="INPUT_15"  /></span>
+          City, Country (required)<br id="BR_13" /> <span id="SPAN_14"><input type="text" name="city1" size="40" id="INPUT_15"  /></span>
+          <span class="error" aria-live="polite"></span>
         </label>
       </p>
     <p id="P_16">
@@ -798,7 +813,7 @@
     </div>
 		<p id="P_21">
 			<label id="LABEL_22">
-				Date From (required)<br id="BR_23" /> <span id="SPAN_24"><input type="text" name="date_from" required id="INPUT_25" /></span>
+				Date From (required)<br id="BR_23" /> <span id="SPAN_24"><input type="date" name="date_from" required id="INPUT_25" /></span>
 			</label>
 		</p>
 		<p id="P_26">
