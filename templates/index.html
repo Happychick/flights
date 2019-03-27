@@ -789,7 +789,7 @@
  <div id="DIV_1">
 	<div id="DIV_2">
 	</div>
-	<form autocomplete= "off" action="/" method="post" id="FORM_3">
+	<form autocomplete= "off" action="/" method="post" id="FORM_3" runat="server"  onsubmit="ShowLoading()">
 		<div id="DIV_4">
 			<input type="hidden" name="_wpcf7" value="871" id="INPUT_5" />
 			<input type="hidden" name="_wpcf7_version" value="5.1.1" id="INPUT_6" />
@@ -23958,6 +23958,22 @@ document.addEventListener("click", function (e) {
 <script>
 autocomplete(document.getElementById("INPUT_15"), countries)
 autocomplete(document.getElementById("INPUT_20"), countries);
+</script>
+
+<script type="text/javascript">
+    function ShowLoading(e) {
+        var div = document.createElement('div');
+        var img = document.createElement('img');
+        img.src = 'loading_bar.GIF';
+        div.innerHTML = "Loading...<br />";
+        div.style.cssText = 'position: fixed; top: 5%; left: 40%; z-index: 5000; width: 422px; text-align: center; background: #EDDBB0; border: 1px solid #000';
+        div.appendChild(img);
+        document.body.appendChild(div);
+        return true;
+        // These 2 lines cancel form submission, so only use if needed.
+        //window.event.cancelBubble = true;
+        //e.stopPropagation();
+    }
 </script>
 
 </body>
