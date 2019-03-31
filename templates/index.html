@@ -1,6 +1,4 @@
 <html>
-<head>
-<title> YOSO - You Only Need to Search Once!</title>
 <style>
 #DIV_1 {
     box-sizing: border-box;
@@ -782,14 +780,47 @@
     padding: 0.3em;
   }
 
+  #loader {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #8c52ff;
+    border-bottom: 16px solid grey;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
 </style>
+<head>
+ <title> YOSO - You Only Need to Search Once!</title>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 </head>
+
 <body>
  <div id="DIV_1">
 	<div id="DIV_2">
 	</div>
-	<form autocomplete= "off" action="/" method="post" id="FORM_3" runat="server"  onsubmit="ShowLoading()">
+	<form autocomplete= "off" action="/" method="post" id="FORM_3" onsubmit="return false">
 		<div id="DIV_4">
 			<input type="hidden" name="_wpcf7" value="871" id="INPUT_5" />
 			<input type="hidden" name="_wpcf7_version" value="5.1.1" id="INPUT_6" />
@@ -823,6 +854,7 @@
 		</p>
 		<p id="P_31">
 			<input type="submit" value="Send" id="INPUT_32" />
+      <div class = "loader" id="loader"></div>
 			<div id="DIV_33">
 			</div>
 		</p>
@@ -23953,27 +23985,23 @@ document.addEventListener("click", function (e) {
     closeAllLists(e.target);
 });
 }
-</script>
 
-<script>
+
 autocomplete(document.getElementById("INPUT_15"), countries)
 autocomplete(document.getElementById("INPUT_20"), countries);
-</script>
 
-<script type="text/javascript">
-    function ShowLoading(e) {
-        var div = document.createElement('div');
-        var img = document.createElement('img');
-        img.src = 'loading_bar.GIF';
-        div.innerHTML = "Loading...<br />";
-        div.style.cssText = 'position: fixed; top: 5%; left: 40%; z-index: 5000; width: 422px; text-align: center; background: #EDDBB0; border: 1px solid #000';
-        div.appendChild(img);
-        document.body.appendChild(div);
-        return true;
-        // These 2 lines cancel form submission, so only use if needed.
-        //window.event.cancelBubble = true;
-        //e.stopPropagation();
-    }
+$(document).ready(function() {
+  const loader = $("#loader");
+  const form = $("#FORM_3");
+
+  form.on('submit', function(e) {
+    e.preventDefault(); //prevent form from submitting
+
+    // lock down the form
+    loader.css("display", "block");
+  });
+
+});
 </script>
 
 </body>
