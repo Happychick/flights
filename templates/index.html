@@ -808,19 +808,17 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  
+
 </style>
 <head>
  <title> YOSO - You Only Need to Search Once!</title>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
 </head>
 
 <body>
  <div id="DIV_1">
 	<div id="DIV_2">
 	</div>
-	<form autocomplete= "off" action="/" method="post" id="FORM_3" onsubmit="return false">
+	<form autocomplete= "off" action="/" method="post" id="FORM_3" runat="server" onsubmit="ShowLoading()">
 		<div id="DIV_4">
 			<input type="hidden" name="_wpcf7" value="871" id="INPUT_5" />
 			<input type="hidden" name="_wpcf7_version" value="5.1.1" id="INPUT_6" />
@@ -23990,18 +23988,17 @@ document.addEventListener("click", function (e) {
 autocomplete(document.getElementById("INPUT_15"), countries)
 autocomplete(document.getElementById("INPUT_20"), countries);
 
-$(document).ready(function() {
-  const loader = $("#loader");
-  const form = $("#FORM_3");
 
-  form.on('submit', function(e) {
-    e.preventDefault(); //prevent form from submitting
+type="text/javascript">
+    function ShowLoading(e) {
+        const loader = $("#loader");
+        loader.css("display", "block")
+        return true;
+        // These 2 lines cancel form submission, so only use if needed.
+        //window.event.cancelBubble = true;
+        //e.stopPropagation();
+    }
 
-    // lock down the form
-    loader.css("display", "block");
-  });
-
-});
 </script>
 
 </body>
