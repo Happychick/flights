@@ -783,7 +783,7 @@
   #lock-modal {
     display: none;
     background-color: black;
-    opacity: 0.5;
+    opacity: 0.35;
     position: absolute;
     top: 0;
     left: 0;
@@ -820,6 +820,74 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  #P_9 {
+    box-sizing: border-box;
+    color: rgb(92, 103, 112);
+    height: 30px;
+    text-decoration: none solid rgb(92, 103, 112);
+    text-size-adjust: 100%;
+    width: 556.797px;
+    column-rule-color: rgb(92, 103, 112);
+    perspective-origin: 278.391px 15px;
+    transform-origin: 278.391px 15px;
+    caret-color: rgb(92, 103, 112);
+    border: 0px none rgb(92, 103, 112);
+    font: normal normal 400 normal 18px / 30.6px Karla, Arial, Helvetica, sans-serif;
+    margin: 0px 0px 20px;
+    outline: rgb(92, 103, 112) none 0px;
+}/*#P_9*/
+
+#P_9:after {
+    color: rgb(92, 103, 112);
+    text-decoration: none solid rgb(92, 103, 112);
+    text-size-adjust: 100%;
+    column-rule-color: rgb(92, 103, 112);
+    caret-color: rgb(92, 103, 112);
+    border: 0px none rgb(92, 103, 112);
+    font: normal normal 400 normal 18px / 30.6px Karla, Arial, Helvetica, sans-serif;
+    outline: rgb(92, 103, 112) none 0px;
+}/*#P_9:after*/
+
+#P_9:before {
+    color: rgb(92, 103, 112);
+    text-decoration: none solid rgb(92, 103, 112);
+    text-size-adjust: 100%;
+    column-rule-color: rgb(92, 103, 112);
+    caret-color: rgb(92, 103, 112);
+    border: 0px none rgb(92, 103, 112);
+    font: normal normal 400 normal 18px / 30.6px Karla, Arial, Helvetica, sans-serif;
+    outline: rgb(92, 103, 112) none 0px;
+}/*#P_9:before*/
+
+#oneway, #return {
+    cursor: default;
+    height: 15px;
+    min-height: 15px;
+    min-width: 14px;
+    text-size-adjust: 100%;
+    vertical-align: middle;
+    width: 14px;
+    perspective-origin: 7px 7.5px;
+    transform-origin: 7px 7.5px;
+    background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box border-box;
+    border: 0px none rgb(0, 0, 0);
+    font: normal normal 400 normal 18px / normal Arial, Helvetica, sans-serif;
+    margin: 3px 4.66699px;
+    padding: 0px;
+}/*#oneway*/
+
+#oneway:after, #return:after {
+    cursor: default;
+    text-size-adjust: 100%;
+    font: normal normal 400 normal 18px / normal Arial, Helvetica, sans-serif;
+}/*#oneway*/
+
+#oneway:before, #return:before {
+    cursor: default;
+    text-size-adjust: 100%;
+    font: normal normal 400 normal 18px / normal Arial, Helvetica, sans-serif;
+}/*#INPUT_14:before, #INPUT_18:before*/
 </style>
 <head>
  <title> YOSO - You Only Need to Search Once!</title>
@@ -840,6 +908,10 @@
 			<input type="hidden" name="g-recaptcha-response" id="INPUT_10" />
 		</div>
     <div class="autocomplete" style="width:300px;">
+    <p id="P_9">
+        <input type="radio" name="flight-type" value="One-way" checked="checked" id="oneway" />
+        <input type="radio" name="flight-type" value="Return" id="return" />
+  	</p>
     <p id="P_11">
         <label id="LABEL_12">
           City, Country (required)<br id="BR_13" /> <span id="SPAN_14"><input type="text" name="city1" size="40" id="INPUT_15"  /></span>
