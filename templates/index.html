@@ -958,6 +958,19 @@
 	</form>
 </div>
 
+
+<script type="text/javascript">
+jQuery(document).ready(function($){
+$('input[name="flight-type"]').on('click', function() {
+    if ($(this).val() === 'One-way') {
+        $('#INPUT_30').prop("disabled",true);
+    }else{
+        $('#INPUT_30').prop("disabled",false);
+    }
+});disabled
+});
+</script>
+
 <script>
 var countries = [ "les Escaldes, Andorra" ,
  "Andorra la Vella, Andorra" ,
@@ -24086,7 +24099,6 @@ autocomplete(document.getElementById("INPUT_20"), countries);
     $('#loader').css('display', 'block');
     $('#lock-modal').css('display', 'block');
    });
-
 </script>
 
 </body>
