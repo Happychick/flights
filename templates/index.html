@@ -779,6 +779,19 @@
   .error.active {
     padding: 0.3em;
   }
+
+  #lock-modal {
+  display: none;
+  background-color: black;
+  opacity: 0.5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+}
   #loader {
     display: none;
     position: absolute;
@@ -846,12 +859,13 @@
 		</p>
 		<p id="P_26">
 			<label id="LABEL_27">
-				Date From (required)<br id="BR_28" /> <span id="SPAN_29"><input type="date" name="date_to" required id="INPUT_30" /></span>
+				Date To (required)<br id="BR_28" /> <span id="SPAN_29"><input type="date" name="date_to" required id="INPUT_30" /></span>
 			</label>
 		</p>
 		<p id="P_31">
 			<input type="submit" value="Send" id="INPUT_32" />
-      <div class = "loader" id="loader"></div>
+      <div id="lock-modal"></div>
+      <div class = "loader" id="lock-modal"></div>
 			<div id="DIV_33">
 			</div>
 		</p>
@@ -23992,6 +24006,7 @@ autocomplete(document.getElementById("INPUT_20"), countries);
 <script type="text/javascript">
    $('#FORM_3').submit(function() {
     $('#loader').css('display', 'block');
+    $('#lock-modal').css('display', 'block');
    });
 
 </script>
