@@ -889,6 +889,11 @@
     text-size-adjust: 100%;
     font: normal normal 400 normal 18px / normal Arial, Helvetica, sans-serif;
 }/*#INPUT_14:before, #INPUT_18:before*/
+
+input:disabled {
+  background: #dddddd;
+}
+
 </style>
 <head>
  <title> YOSO - You Only Need to Search Once!</title>
@@ -921,13 +926,13 @@
   	</p>
     <p id="P_11">
         <label id="LABEL_12">
-          City, Country (required)<br id="BR_13" /> <span id="SPAN_14"><input type="text" name="city1" size="40" id="INPUT_15"  /></span>
+          Your City, Country (required)<br id="BR_13" /> <span id="SPAN_14"><input type="text" name="city1" size="40" id="INPUT_15"  /></span>
           <span class="error" aria-live="polite"></span>
         </label>
       </p>
     <p id="P_16">
         <label id="LABEL_17">
-				City, Country (required)<br id="BR_18" /> <span id="SPAN_19"><input type="text" name="city2" required size="40" id="INPUT_20" /></span>
+				Their City, Country (required)<br id="BR_18" /> <span id="SPAN_19"><input type="text" name="city2" required size="40" id="INPUT_20" /></span>
         </label>
     </p>
     </div>
