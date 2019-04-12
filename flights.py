@@ -163,6 +163,7 @@ def index():
     if request.method == 'GET':
         return render_template("index.html")
     else:
+        print(request.form['flight_type'])
         city1 = request.form['city1']
         city2 = request.form['city2']
         date_from = request.form['date_from']
