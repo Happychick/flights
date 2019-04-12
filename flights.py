@@ -158,12 +158,17 @@ def get_itinerary(city1,city2,date_from,date_to):
 
 # One call is to collect data, the other one posts it
 # First time we say methods, next only method, order doesn't matter
-@app.route('/', methods=['GET','POST'])
+@app.route('/', methods=['GET'])
+def home():
+    return render_template("selector.html")
+
+@app.route('/trip', methods=['GET','POST'])
 def index():
     if request.method == 'GET':
-        return render_template("index.html")
+        template = request.args.get('type')
+        return render_template(f"{template}.html")
     else:
-        print(request.form['flight-type'])
+        flight_type = request.form['flight-type']
         city1 = request.form['city1']
         city2 = request.form['city2']
         date_from = request.form['date_from']
