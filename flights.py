@@ -94,7 +94,7 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
             'limit':limit
         }
     else:
-    dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
+        dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
         params = {
             'flyFrom':fl_id, #Use the code from the location match above
             'dateFrom': df,
