@@ -890,7 +890,7 @@
     font: normal normal 400 normal 18px / normal Arial, Helvetica, sans-serif;
 }/*#INPUT_14:before, #INPUT_18:before*/
 
-input:disabled {
+input:readonly {
   background: #dddddd;
 }
 
@@ -969,11 +969,12 @@ input:disabled {
 jQuery(document).ready(function($){
 $('input[name="flight_type"]').on('click', function() {
     if ($(this).val() === 'One-way') {
-        $('#INPUT_30').prop("disabled",true);
+        $('#INPUT_30').prop("readonly",true);
+        $('#INPUT_30').val('#INPUT_25')
     }else{
-        $('#INPUT_30').prop("disabled",false);
+        $('#INPUT_30').prop("readonly",false);
     }
-});disabled
+});readonly
 });
 </script>
 
