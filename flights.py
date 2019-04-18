@@ -87,7 +87,7 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
     if flight_type =="One-way":
         # Use the code to get the flights
         params = {
-            'flyFrom':fl_id, #Use the code from the location match above
+            'flyFrom':city_id, #Use the code from the location match above
             'dateFrom': df,
             'dateTo':df,
             'one_for_city':'1',
@@ -96,7 +96,7 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
     else:
         dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
         params = {
-            'flyFrom':fl_id, #Use the code from the location match above
+            'flyFrom':city_id, #Use the code from the location match above
             'dateFrom': df,
             'dateTo':df,
             'return_from':dt,
@@ -190,7 +190,7 @@ def index():
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
-        dict = get_itinerary(flight_type,city1,city2,date_from,date_to=None)
+        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
         return render_template("results.html", result = dict)
 
 
