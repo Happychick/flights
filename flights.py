@@ -74,7 +74,7 @@ def get_locations_city(city_from):
 
 
 # Get data
-def get_flights(flight_type,loc_params,date_from,date_to=None):
+def get_flights(flight_type,city_from,date_from,date_to=None):
 
     city_id = get_locations_city(city_from)
     headers={'accept':'application/json','apikey':apikey}
@@ -151,8 +151,8 @@ def flight_output(flight1, flight2):
 def get_itinerary(city1,city2,date_from,date_to):
 
     # Extract user defined info for input
-    flight1=get_flights(city1,date_from,date_to)
-    flight2=get_flights(city2,date_from,date_to)
+    flight1=get_flights(flight_type,city1,date_from,date_to=none)
+    flight2=get_flights(flight_type,city2,date_from,date_to=none)
     flight_matches = flight_output(flight1, flight2)
     # print(len(flight_matches))
 
