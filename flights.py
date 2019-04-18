@@ -190,7 +190,7 @@ def index():
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
-        dict = get_itinerary(city1,city2,date_from,date_to)
+        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
         return render_template("results.html", result = dict)
 
 
