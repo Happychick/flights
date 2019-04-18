@@ -151,8 +151,8 @@ def flight_output(flight1, flight2):
 def get_itinerary(flight_type,city1,city2,date_from,date_to=None):
 
     # Extract user defined info for input
-    flight1=get_flights(flight_type,city1,date_from,date_to=None)
-    flight2=get_flights(flight_type,city2,date_from,date_to=None)
+    flight1=get_flights(flight_type,city1,date_from,date_to)
+    flight2=get_flights(flight_type,city2,date_from,date_to)
     flight_matches = flight_output(flight1, flight2)
     # print(len(flight_matches))
 
@@ -190,7 +190,7 @@ def index():
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
-        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
+        dict = get_itinerary(flight_type,city1,city2,date_from,date_to=None)
         return render_template("results.html", result = dict)
 
 
