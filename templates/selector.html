@@ -1,11 +1,31 @@
+<!DOCTYPE html>
 <html>
 <head>
+<style>
+#header {
+  color: black;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  width: 100%;
+  font: normal normal 400 normal 16px / 30.6px Karla, Arial, Helvetica, sans-serif;
+}
+
+.cities {
+  background-color: white;
+  color: #8c52ff;
+  margin: 20px;
+  padding: 20px;
+}
+
+</style>
 </head>
 
 <body>
-<a href="/trip?type=cheapest">Cheapest Flight</a>
-<a href="/trip?type=shortest">Shortest Flight</a>
-<a href="/trip?type=together">Land close Together!</a>
+<p id ="title">1. What do you want to search for?</p2>
+<div class = 'options'>
+<p><a href="/trip?type=cheapest" id = 'option1'>Cheapest Flight</a></p>
+<p><a href="/trip?type=shortest" id = 'option2'>Shortest Flight</a></p>
+<p><a href="/trip?type=together" id = 'option3'>Land close Together!</a></p>
+</div>
 </body>
 
 </html>
