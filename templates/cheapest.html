@@ -969,8 +969,8 @@ input:readonly {
 jQuery(document).ready(function($){
 $('input[name="flight_type"]').on('click', function() {
     if ($(this).val() === 'One-way') {
-        $('#INPUT_30').prop("readonly",true);
         $('#INPUT_30').val('#INPUT_25')
+        $('#INPUT_30').prop("readonly",true);
     }else{
         $('#INPUT_30').prop("readonly",false);
     }
