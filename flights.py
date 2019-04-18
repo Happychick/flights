@@ -83,24 +83,24 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
     #Ensure that date is captured in good formate
     #dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%y')
     df = datetime.strptime(date_from, '%Y-%m-%d').strftime('%d/%m/%Y')
-    dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
 
     if flight_type =="One-way":
         # Use the code to get the flights
         params = {
             'flyFrom':fl_id, #Use the code from the location match above
-            'dateFrom': date_from,
-            'dateTo':date_to,
+            'dateFrom': df,
+            'dateTo':df,
             'one_for_city':'1',
             'limit':limit
         }
     else:
+    dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
         params = {
             'flyFrom':fl_id, #Use the code from the location match above
-            'dateFrom': date_from,
-            'dateTo':date_from,
-            'return_from':date_to,
-            'return_to':date_to,
+            'dateFrom': df,
+            'dateTo':df,
+            'return_from':dt,
+            'return_to':dt,
             'flight_type':'round',
             'limit':limit
         }
