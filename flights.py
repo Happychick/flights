@@ -148,7 +148,7 @@ def flight_output(flight1, flight2):
 
 
 # Return the result city and price
-def get_itinerary(city1,city2,date_from,date_to):
+def get_itinerary(flight_type,city1,city2,date_from,date_to):
 
     # Extract user defined info for input
     flight1=get_flights(flight_type,city1,date_from,date_to=none)
