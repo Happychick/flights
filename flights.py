@@ -10,14 +10,18 @@ import pandas as pd
 from datetime import datetime
 from collections import defaultdict
 
-# All other variables are specified in the html, this one is fixed
-# This is for showing results, not entirely sure how that works
-partner = 'picky'
+# Set the variable for the API Key that allows us to tie to YOSO
+apikey = '3Ahc4gcDjDjrHBJyHBm0cRzAC1LAxBAT'
+# Set the limit otherwise the search won't work!
+limit = '200'
 
 # Mafe a function for each part
 # This is the location function
 
 def get_locations_city(city_from):
+
+    # Add headers for requests
+    headers = {'accept':'application/json', 'apikey':apikey}
 
     # Split string into list of variables
     loc = city_from.split(',')
@@ -35,7 +39,7 @@ def get_locations_city(city_from):
         }
 
     # Extract location infromation out using location API
-    resp=requests.get('https://api.skypicker.com/locations', params = params_loc)
+    resp=requests.get('https://kiwicom-prod.apigee.net/locations/query', params = params_loc, headers = headers)
     # Parse json into dictionary
     results= resp.json()
 
@@ -52,7 +56,7 @@ def get_locations_city(city_from):
     }
 
     # Extract location infromation out using location API
-    resp=requests.get('https://api.skypicker.com/locations', params = params_loc)
+    resp=requests.get('https://kiwicom-prod.apigee.net/locations/query', params = params_loc, headers = headers)
 
     # Parse json into dictionary
     results= resp.json()
@@ -70,9 +74,10 @@ def get_locations_city(city_from):
 
 
 # Get data
-def get_flights(city_from, date_from,date_to):
+def get_flights(flight_type,loc_params,date_from,date_to=None):
 
     city_id = get_locations_city(city_from)
+    headers={'accept':'application/json','apikey':apikey}
     one_for_city = '1'
 
     #Ensure that date is captured in good formate
@@ -80,16 +85,28 @@ def get_flights(city_from, date_from,date_to):
     df = datetime.strptime(date_from, '%Y-%m-%d').strftime('%d/%m/%Y')
     dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
 
-    # Use the code to get the flights
-    params = {
-    'flyFrom': city_id, #Use the code from the location match above
-    'dateFrom': df,
-    'dateTo':dt,
-    'partner': partner,
-    'one_for_city':one_for_city
-    }
+    if flight_type =="One-way":
+        # Use the code to get the flights
+        params = {
+            'flyFrom':fl_id, #Use the code from the location match above
+            'dateFrom': date_from,
+            'dateTo':date_to,
+            'one_for_city':'1',
+            'limit':limit
+        }
+    else:
+        params = {
+            'flyFrom':fl_id, #Use the code from the location match above
+            'dateFrom': date_from,
+            'dateTo':date_from,
+            'return_from':date_to,
+            'return_to':date_to,
+            'flight_type':'round',
+            'limit':limit
+        }
+
     # Get data
-    resp=requests.get('https://api.skypicker.com/flights', params = params)
+    resp=requests.get('https://kiwicom-prod.apigee.net/v2/search?', params = params, headers = headers)
     # Parse json into dictionary
     flights=resp.json()
 
@@ -168,7 +185,7 @@ def index():
         template = request.args.get('type')
         return render_template(f"{template}.html")
     else:
-        flight_type = request.form['flight-type']
+        flight_type = request.form['flight_type']
         city1 = request.form['city1']
         city2 = request.form['city2']
         date_from = request.form['date_from']
