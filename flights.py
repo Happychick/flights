@@ -102,7 +102,8 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
             'return_from':dt,
             'return_to':dt,
             'flight_type':'round',
-            'limit':limit
+            'limit':limit,
+            'sort':'price'
         }
 
     # Get data
