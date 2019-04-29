@@ -13,7 +13,6 @@ from collections import defaultdict
 # Set the variable for the API Key that allows us to tie to YOSO
 apikey = '3Ahc4gcDjDjrHBJyHBm0cRzAC1LAxBAT'
 # Set the limit otherwise the search won't work!
-limit = '200'
 
 # Mafe a function for each part
 # This is the location function
@@ -90,8 +89,7 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
             'flyFrom':city_id, #Use the code from the location match above
             'dateFrom': df,
             'dateTo':df,
-            'one_for_city':'1',
-            'limit':limit
+            'one_for_city':'1'
         }
     else:
         dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
@@ -102,7 +100,6 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
             'return_from':dt,
             'return_to':dt,
             'flight_type':'round',
-            'limit':limit,
             'sort':'price'
         }
 
