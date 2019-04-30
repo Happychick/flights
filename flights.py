@@ -13,6 +13,7 @@ from collections import defaultdict
 # Set the variable for the API Key that allows us to tie to YOSO
 apikey = '3Ahc4gcDjDjrHBJyHBm0cRzAC1LAxBAT'
 # Set the limit otherwise the search won't work!
+limit = '200'
 
 # Mafe a function for each part
 # This is the location function
