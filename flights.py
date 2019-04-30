@@ -89,7 +89,8 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
             'flyFrom':city_id, #Use the code from the location match above
             'dateFrom': df,
             'dateTo':df,
-            'one_for_city':'1'
+            'one_for_city':'1',
+            'limit':limit
         }
     else:
         dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
