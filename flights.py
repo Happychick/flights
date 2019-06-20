@@ -108,70 +108,63 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
     # Get data
     resp=requests.get('https://kiwicom-prod.apigee.net/v2/search?', params = params, headers = headers)
     # Parse json into dictionary
-    flights=resp.json()
+    fl=resp.json()
+    # Put into dataframe
+    results = pd.DataFrame(fl['data'], columns=['cityFrom','cityTo','deep_link','price'])
 
-    return flights
+    return results
 
 # This actually extracts the flight prices for each desitnation city
 # Step 2: Add the deeplink for the flight
 
-def flight_output(flight1, flight2):
-    flight_matches = defaultdict(dict)
+#Make sure we get the cheapeast price per location
 
-    for flight in flight1['data']:
-        cityto = flight['cityTo']
-        cityfrom = flight['cityFrom']
-        price = flight['price']
-        link = flight['deep_link']
-        # Check if we already have the city - if yes, skip, if not add
-        # To nested dictionary
-        if cityto in flight_matches == True:
-            pass
-        else:
-            flight_matches[cityto]['price'] = [price]
-            flight_matches[cityto]['flight'] = [link]
+def flight_output_table(flight1, flight2):
+    # 1. Get one price per location
+    # 2. Ensure we remove any duplicates in the return results
+    # 3. Combine data sets
+    # 4. Get the total price for the journey
+    # 5. Sort the results
+    # N.B it appears like there are actually are duplicates
 
-    for flight in flight2['data']:
-        cityto = flight['cityTo']
-        cityfrom = flight['cityFrom']
-        price = flight['price']
-        link = flight['deep_link']
-        # If you ask for a key that isn't in the dictionary you get an error
-        try:
-            if len(flight_matches[cityto]['price']) == 1:
-                flight_matches[cityto]['price'].append(price)
-                flight_matches[cityto]['flight'].append(link)
-        except:
-            pass
+    # 1.
+    min_price = flight1.groupby(['cityTo','cityFrom'], as_index=False)['price'].min()
+    min_price2 = flight2.groupby(['cityTo','cityFrom'], as_index=False)['price'].min()
 
-    return flight_matches
+    # 2.
+    filtered_f1 = flight1[flight1.price.isin(min_price['price'])].drop_duplicates()
+    filtered_f2 = flight2[flight2.price.isin(min_price2['price'])].drop_duplicates()
 
+    # 3.
+    final = pd.merge(filtered_f1, filtered_f2[['cityFrom','cityTo','price','deep_link']], how='inner',on='cityTo', sort=False)
+    # 4.
+    final['total']=final['price_x'] + final['price_y']
+
+    # 5.
+    return final.sort_values(by='total')
 
 # Return the result city and price
+# Get full list of results and a pretty dataframe at the end!
 def get_itinerary(flight_type,city1,city2,date_from,date_to=None):
 
     # Extract user defined info for input
     flight1=get_flights(flight_type,city1,date_from,date_to)
     flight2=get_flights(flight_type,city2,date_from,date_to)
-    flight_matches = flight_output(flight1, flight2)
-    # print(len(flight_matches))
+    flight_matches = flight_output_table(flight1, flight2)
 
-    # Get the final output
-    total_prices = {}
+    #Rename columns in output table
+    your_city = flight_matches.cityFrom_x.unique().tolist()
+    their_city = flight_matches.cityFrom_y.unique().tolist()
+    flight_matches.rename(columns={'deep_link_x':your_city[0],
+                                   'deep_link_y':their_city[0],
+                                   'cityTo':"City To",
+                                   'total':"Total Price"},
+                                    inplace=True)
 
-    for city, f_info in flight_matches.items():
-        for key in f_info:
-            if len(f_info[key]) == 2 and key == 'price':
-                total = sum(f_info[key])
-                total_prices[city] = total
+    #Drop unnecessary columns
+    clean = flight_matches.drop(['cityFrom_x', 'cityFrom_y','price_x','price_y'], axis=1)
 
-    min_price = min(total_prices, key=total_prices.get)
-
-    #Links to actual flights
-    link1 = flight_matches[min_price]['flight'][0]
-    link2 = flight_matches[min_price]['flight'][1]
-
-    return {'City': min_price, 'Price': total_prices[min_price], city1 :link1, city2:link2}
+    return clean
 
 # One call is to collect data, the other one posts it
 # First time we say methods, next only method, order doesn't matter
@@ -191,7 +184,11 @@ def index():
         date_from = request.form['date_from']
         date_to = request.form['date_to']
         dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
-        return render_template("results.html", result = dict)
+        return render_template("results.html", column_names=dict.columns.values,
+                        row_data=list(dict.values.tolist()),
+                        link_column=["City To","Total Price"],
+                        df=dict,
+                        zip=zip)
 
 
 #This means you are running a program

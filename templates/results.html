@@ -24,6 +24,28 @@
   color: white;
 }
 
+#more {
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
+  background-color: #8c52ff;
+  color: #fff;
+  border-width: 0 1px 1px 0;
+  border-style: solid;
+  border-color: #fff;
+  box-shadow: 0 1px 1px #ccc;
+  transition: all 600ms ease-in-out;
+  -webkit-transition: all 600ms ease-in-out;
+  -moz-transition: all 600ms ease-in-out;
+  -o-transition: all 600ms ease-in-out;
+  font: normal 16px / 30.6px Karla, Arial, Helvetica, sans-serif;
+}
+
+#more:hover {
+    background-color: #fff;
+    color: #8c52ff;
+}
+
 a:link, a:visited {
   background-color: grey;
   color: white;
@@ -44,19 +66,80 @@ a:hover, a:active {
 href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
 integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
 crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
    <body>
       <table id="results">
-         {% for key, value in result.items() %}
-            <tr>
-               <th> {{ key }} </th>
-               <td> {%- if loop.index <= 2 %}
-                    {{ value }}
-                    {% else %}
-                    <a href="{{ value }}" target="_blank">Book <i class='fas fa-plane' style='font-size:24px'></i></a>
-                    {% endif %}</td>
-            </tr>
-         {% endfor %}
-      </table>
+        <tr>
+          {% for col in column_names %}
+          <th>{{col}}</th>
+          {% endfor %}
+        </tr>
+        {% for row in row_data %}
+        <tr>
+          {% for col, row_ in zip(column_names, row) %}
+          {% if col not in link_column %}
+        <td><a href="{{ row_ }}" target="_blank">Book <i class='fas fa-plane' style='font-size:24px'></i></a>
+        <!--T{{ row_ }}-->
+        </td>
+       {% else %}
+       <td>{{row_}}</td>
+       {% endif %}
+       {% endfor %}
+     </tr>
+     {% endfor %}
+    </table>
    </body>
+
+   <script>
+   $(function() {
+     /* initial variables */
+     var numRows = $('#results').find('tr').length;
+     var numShown = 1;
+     var MORE = 1;
+
+     /* get how many more can be shown */
+     var getNumMore = function(ns) {
+         var more = MORE;
+         var leftOver = numRows - ns;
+         if ((leftOver) < more) {
+           more = leftOver;
+         }
+         return more;
+       }
+
+     /* Set values of initial variables */
+     var numMore = getNumMore(numShown);
+
+     /* set more html */
+     if (numMore > 0) {
+       var more_html = '<p><button id="more">Load <span style="font-weight: bold;">'+ numMore + '</span> More</button></p>';
+       $('#results').find('tr:gt(' + (numShown - 1) + ')').hide().end().after(more_html);
+     }
+     $('#more').click(function() {
+       /* determine how much more we should update */
+       numMore = getNumMore(numShown);
+       /* update num shown */
+       numShown = numShown + numMore;
+       $('#results').find('tr:lt(' + numShown + ')').slideDown();
+        if (numMore > 0) {
+               $("#load").fadeOut('slow');
+           }
+           $('html,body').animate({
+               scrollTop: $(this).offset().top
+           }, 1500);;
+
+       /* determine if to show more and how much left over */
+       numMore = getNumMore(numShown);
+       if (numMore > 0) {
+         $('#more span').html(numMore);
+       } else {
+         $('#more').remove();
+       }
+
+     });
+
+   });
+
+   </script>
 </html>
