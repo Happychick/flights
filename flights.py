@@ -1,6 +1,9 @@
 import requests
 # These 2 lines and the last 2 wrap your web page, you put the rest between
-from flask import Flask, request, render_template #make sure this is upper case
+from flask import Flask, request, render_template
+from database import db_session
+from models import Location # Get the table schema
+#make sure this is upper case
 app = Flask(__name__)
 # In essence you are developing web pages
 # The name of the app will be run on the flask server
@@ -191,6 +194,10 @@ def index():
                         zip=zip)
 
 
+# Shutdown database
+@app.teardown_appcontext
+def shutdown_session(exception=None):
+    db_session.remove()
 #This means you are running a program
 if __name__ == "__main__":
     app.run(debug=True)
