@@ -1,6 +1,8 @@
 import requests
 # These 2 lines and the last 2 wrap your web page, you put the rest between
 from flask import Flask, request, render_template
+
+# Here we in essence are importing the database
 from database import db_session
 from models import Location # Get the table schema
 #make sure this is upper case
