@@ -1,10 +1,10 @@
 import requests
 # These 2 lines and the last 2 wrap your web page, you put the rest between
-from flask import Flask, request, render_template
-
+from flask import Flask, request, render_template, redirect
 # Here we in essence are importing the database
 from database import db_session
 from models import Location # Get the table schema
+
 #make sure this is upper case
 app = Flask(__name__)
 # In essence you are developing web pages
@@ -181,6 +181,7 @@ def home():
 def index():
     if request.method == 'GET':
         template = request.args.get('type')
+        autocomplete()
         return render_template(f"{template}.html")
     else:
         flight_type = request.form['flight_type']
@@ -195,6 +196,18 @@ def index():
                         df=dict,
                         zip=zip)
 
+def autocomplete():
+    #Get variable to search for
+    search = request.args.get('q')
+
+    countries = []
+    for row in db_session.query(Location, Location.airport_code,Location.city).\
+    filter(or_(Location.city.ilike('%'+str(search)+'%'),Location.airport_code.ilike('%'+str(search)+'%'))).\
+    all():
+     result = '(' +row.airport_code+')'+' '+row.city
+     countries.append(result)
+
+    return jsonify(countries=countries)
 
 # Shutdown database
 @app.teardown_appcontext
