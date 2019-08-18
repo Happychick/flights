@@ -111,6 +111,7 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
             'sort':'price'
         }
 
+    #Should add all optimization variables at this stage        
     # Get data
     resp=requests.get('https://kiwicom-prod.apigee.net/v2/search?', params = params, headers = headers)
     # Parse json into dictionary
