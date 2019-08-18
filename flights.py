@@ -182,7 +182,6 @@ def home():
 def index():
     if request.method == 'GET':
         template = request.args.get('type')
-        autocomplete()
         return render_template(f"{template}.html")
     else:
         flight_type = request.form['flight_type']
