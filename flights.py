@@ -182,7 +182,7 @@ def home():
         return render_template("selector.html")
     else:
         template = request.args.get('type')
-        return redirect("/trip?type=<template>", code=302)
+        return redirect(f"/trip?type={template}", code=302)
 
 
 
