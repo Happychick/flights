@@ -173,60 +173,80 @@ def get_itinerary(flight_type,city1,city2,date_from,date_to=None):
 
     return clean
 
+def get_shortest(flight_type,city1,city2,date_from,date_to=None):
+
+    # Extract user defined info for input
+    flight1=get_flights(flight_type,city1,date_from,date_to)
+    flight2=get_flights(flight_type,city2,date_from,date_to)
+    flight_matches = flight_output_table(flight1, flight2)
+
+    #Rename columns in output table
+    your_city = flight_matches.cityFrom_x.unique().tolist()
+    their_city = flight_matches.cityFrom_y.unique().tolist()
+    flight_matches.rename(columns={'deep_link_x':your_city[0],
+                                   'deep_link_y':their_city[0],
+                                   'cityTo':"City To",
+                                   'total':"Total Length"},
+                                    inplace=True)
+
+    #Drop unnecessary columns
+    clean = flight_matches.drop(['cityFrom_x', 'cityFrom_y','price_x','price_y'], axis=1)
+
+    return clean
+
+def get_toghether(flight_type,city1,city2,date_from,date_to=None):
+
+    # Extract user defined info for input
+    flight1=get_flights(flight_type,city1,date_from,date_to)
+    flight2=get_flights(flight_type,city2,date_from,date_to)
+    flight_matches = flight_output_table(flight1, flight2)
+
+    #Rename columns in output table
+    your_city = flight_matches.cityFrom_x.unique().tolist()
+    their_city = flight_matches.cityFrom_y.unique().tolist()
+    flight_matches.rename(columns={'deep_link_x':your_city[0],
+                                   'deep_link_y':their_city[0],
+                                   'cityTo':"City To",
+                                   'total':"Total Length"},
+                                    inplace=True)
+
+    #Drop unnecessary columns
+    clean = flight_matches.drop(['cityFrom_x', 'cityFrom_y','price_x','price_y'], axis=1)
+
+    return clean
+
+
 # One call is to collect data, the other one posts it
 # First time we say methods, next only method, order doesn't matter
 @app.route('/', methods=['GET'])
 def home():
     # If you haven't made a selection, show the template
-        return render_template("selector.html")
+    return render_template("selector.html")
 
 
-#@app.route('/trip', methods=['GET','POST'])
-#def index():
-#    if request.method == 'GET':
-#        template = request.args.get('type')
-#        return redirect(f"/trip?type={template}", code=302)
-        #return render_template(f"{template}.html")
-#    else:
-#        flight_type = request.form['flight_type']
-#        city1 = request.form['city1']
-#        city2 = request.form['city2']
-#        date_from = request.form['date_from']
-#        date_to = request.form['date_to']
-#        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
-#        return render_template("results.html", column_names=dict.columns.values,
-#                        row_data=list(dict.values.tolist()),
-#                        link_column=["City To","Total Price"],
-#                        df=dict,
-#                        zip=zip)
-
-# Results page should be uniform, because the results have the same
-# Number of rows
-@app.route('/trip?type=cheapest', methods=['GET','POST'])
-def form():
+@app.route('/trip', methods=['GET','POST'])
+def index():
     if request.method == 'GET':
-        return render_template("cheapest.html")
+        template = request.args.get('type')
+        return render_template(f"{template}.html")
     else:
         flight_type = request.form['flight_type']
         city1 = request.form['city1']
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
-        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
+        if template == 'cheapest':
+            dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
+        elif template == 'shortest':
+            # Do function for calulcating shortest one
+            dict = get_shortest(flight_type,city1,city2,date_from,date_to)
+        else:
+            dict = get_closest(flight_type,city1,city2,date_from,date_to)
         return render_template("results.html", column_names=dict.columns.values,
                         row_data=list(dict.values.tolist()),
                         link_column=["City To","Total Price"],
                         df=dict,
                         zip=zip)
-
-@app.route('/trip?type=together', methods=['GET','POST'])
-def together():
-    return render_template("together.html")
-
-@app.route('/trip?type=shortest', methods=['GET','POST'])
-def shortest():
-    return render_template("shortest.html")
-
 
 
 # This means you are running a program
