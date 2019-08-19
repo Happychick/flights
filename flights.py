@@ -111,7 +111,7 @@ def get_flights(flight_type,city_from,date_from,date_to=None):
             'sort':'price'
         }
 
-    #Should add all optimization variables at this stage        
+    #Should add all optimization variables at this stage
     # Get data
     resp=requests.get('https://kiwicom-prod.apigee.net/v2/search?', params = params, headers = headers)
     # Parse json into dictionary
@@ -177,12 +177,20 @@ def get_itinerary(flight_type,city1,city2,date_from,date_to=None):
 # First time we say methods, next only method, order doesn't matter
 @app.route('/', methods=['GET'])
 def home():
-    return render_template("selector.html")
+    # If you haven't made a selection, show the template
+    if request.method == 'GET':
+        return render_template("selector.html")
+    else:
+        template = request.args.get('type')
+        redirect(f"/trip?type={template}", code=302)
+
+
 
 @app.route('/trip', methods=['GET','POST'])
 def index():
     if request.method == 'GET':
         template = request.args.get('type')
+        return redirect(f"/trip?type={template}", code=302)
         return render_template(f"{template}.html")
     else:
         flight_type = request.form['flight_type']
@@ -196,6 +204,60 @@ def index():
                         link_column=["City To","Total Price"],
                         df=dict,
                         zip=zip)
+
+# Results page should be uniform, because the results have the same
+# Number of rows
+@app.route('/trip?type=cheapest', methods=['GET','POST'])
+def form():
+    if if request.method == 'GET':
+        return render_template("cheapest.html")
+    else:
+        flight_type = request.form['flight_type']
+        city1 = request.form['city1']
+        city2 = request.form['city2']
+        date_from = request.form['date_from']
+        date_to = request.form['date_to']
+        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
+        return render_template("results.html", column_names=dict.columns.values,
+                        row_data=list(dict.values.tolist()),
+                        link_column=["City To","Total Price"],
+                        df=dict,
+                        zip=zip)
+
+@app.route('/trip?type=together', methods=['GET','POST'])
+def form():
+    if if request.method == 'GET':
+        return render_template("together.html")
+    else:
+        flight_type = request.form['flight_type']
+        city1 = request.form['city1']
+        city2 = request.form['city2']
+        date_from = request.form['date_from']
+        date_to = request.form['date_to']
+        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
+        return render_template("results.html", column_names=dict.columns.values,
+                        row_data=list(dict.values.tolist()),
+                        link_column=["City To","Total Price"],
+                        df=dict,
+                        zip=zip)
+
+@app.route('/trip?type=cheapest', methods=['GET','POST'])
+def form():
+    if if request.method == 'GET':
+        return render_template("cheapest.html")
+    else:
+        flight_type = request.form['flight_type']
+        city1 = request.form['city1']
+        city2 = request.form['city2']
+        date_from = request.form['date_from']
+        date_to = request.form['date_to']
+        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
+        return render_template("results.html", column_names=dict.columns.values,
+                        row_data=list(dict.values.tolist()),
+                        link_column=["City To","Total Price"],
+                        df=dict,
+                        zip=zip)
+
 
 
 #This means you are running a program
