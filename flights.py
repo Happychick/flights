@@ -235,7 +235,7 @@ def index():
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
-        template = request.args.get('type')
+        template = request.args.get('type','')
         if template == 'cheapest':
             dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
         elif template == 'shortest':
@@ -243,6 +243,7 @@ def index():
             dict = get_shortest(flight_type,city1,city2,date_from,date_to)
         else:
             dict = get_closest(flight_type,city1,city2,date_from,date_to)
+
         return render_template("results.html", column_names=dict.columns.values,
                         row_data=list(dict.values.tolist()),
                         link_column=["City To","Total Price"],
