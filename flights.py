@@ -225,38 +225,12 @@ def form():
                         zip=zip)
 
 @app.route('/trip?type=together', methods=['GET','POST'])
-def form():
-    if request.method == 'GET':
-        return render_template("together.html")
-    else:
-        flight_type = request.form['flight_type']
-        city1 = request.form['city1']
-        city2 = request.form['city2']
-        date_from = request.form['date_from']
-        date_to = request.form['date_to']
-        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
-        return render_template("results.html", column_names=dict.columns.values,
-                        row_data=list(dict.values.tolist()),
-                        link_column=["City To","Total Price"],
-                        df=dict,
-                        zip=zip)
+def together():
+    return render_template("together.html")
 
 @app.route('/trip?type=shortest', methods=['GET','POST'])
-def form():
-    if request.method == 'GET':
-        return render_template("shortest.html")
-    else:
-        flight_type = request.form['flight_type']
-        city1 = request.form['city1']
-        city2 = request.form['city2']
-        date_from = request.form['date_from']
-        date_to = request.form['date_to']
-        dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
-        return render_template("results.html", column_names=dict.columns.values,
-                        row_data=list(dict.values.tolist()),
-                        link_column=["City To","Total Price"],
-                        df=dict,
-                        zip=zip)
+def shortest():
+    return render_template("shortest.html")
 
 
 
