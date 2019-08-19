@@ -194,7 +194,7 @@ def get_shortest(flight_type,city1,city2,date_from,date_to=None):
 
     return clean
 
-def get_toghether(flight_type,city1,city2,date_from,date_to=None):
+def get_together(flight_type,city1,city2,date_from,date_to=None):
 
     # Extract user defined info for input
     flight1=get_flights(flight_type,city1,date_from,date_to)
@@ -235,6 +235,7 @@ def index():
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
+        template = request.args.get('type')
         if template == 'cheapest':
             dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
         elif template == 'shortest':
