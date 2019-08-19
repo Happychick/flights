@@ -194,7 +194,7 @@ def get_shortest(flight_type,city1,city2,date_from,date_to=None):
 
     return clean
 
-def get_together(flight_type,city1,city2,date_from,date_to=None):
+def get_closest(flight_type,city1,city2,date_from,date_to=None):
 
     # Extract user defined info for input
     flight1=get_flights(flight_type,city1,date_from,date_to)
