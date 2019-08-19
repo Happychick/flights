@@ -191,7 +191,7 @@ def index():
     if request.method == 'GET':
         template = request.args.get('type')
         return redirect(f"/trip?type={template}", code=302)
-        return render_template(f"{template}.html")
+        #return render_template(f"{template}.html")
     else:
         flight_type = request.form['flight_type']
         city1 = request.form['city1']
@@ -209,7 +209,7 @@ def index():
 # Number of rows
 @app.route('/trip?type=cheapest', methods=['GET','POST'])
 def form():
-    if if request.method == 'GET':
+    if request.method == 'GET':
         return render_template("cheapest.html")
     else:
         flight_type = request.form['flight_type']
@@ -241,10 +241,10 @@ def form():
                         df=dict,
                         zip=zip)
 
-@app.route('/trip?type=cheapest', methods=['GET','POST'])
+@app.route('/trip?type=shortest', methods=['GET','POST'])
 def form():
     if if request.method == 'GET':
-        return render_template("cheapest.html")
+        return render_template("shortest.html")
     else:
         flight_type = request.form['flight_type']
         city1 = request.form['city1']
