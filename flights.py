@@ -178,12 +178,7 @@ def get_itinerary(flight_type,city1,city2,date_from,date_to=None):
 @app.route('/', methods=['GET'])
 def home():
     # If you haven't made a selection, show the template
-    if request.method == 'GET':
         return render_template("selector.html")
-    else:
-        template = request.args.get('type')
-        return redirect(f"/trip?type={template}", code=302)
-
 
 
 #@app.route('/trip', methods=['GET','POST'])
