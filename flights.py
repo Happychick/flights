@@ -22,7 +22,7 @@ apikey = '3Ahc4gcDjDjrHBJyHBm0cRzAC1LAxBAT'
 limit = '200'
 
 # Mafe a function for each part
-# This is the location function
+# This is the location function, that gets the airport code
 
 def get_locations_city(city_from):
 
@@ -207,7 +207,7 @@ def get_closest(flight_type,city1,city2,date_from,date_to=None):
     flight_matches.rename(columns={'deep_link_x':your_city[0],
                                    'deep_link_y':their_city[0],
                                    'cityTo':"City To",
-                                   'total':"Total Length"},
+                                   'total':"Total Time"},
                                     inplace=True)
 
     #Drop unnecessary columns
@@ -218,35 +218,31 @@ def get_closest(flight_type,city1,city2,date_from,date_to=None):
 
 # One call is to collect data, the other one posts it
 # First time we say methods, next only method, order doesn't matter
-@app.route('/', methods=['GET'])
-def home():
-    # If you haven't made a selection, show the template
-    return render_template("selector.html")
-
-
-@app.route('/trip/', methods=['GET','POST'])
+@app.route('/', methods=['GET','POST'])
 def index():
     template = request.args.get('type')
     if request.method == 'GET':
         #template = request.args.get('type')
-        return render_template(f"{template}.html")
+        return render_template("selector.html")
     else:
         flight_type = request.form['flight_type']
         city1 = request.form['city1']
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
-        if template == 'cheapest':
+        operation = request.form.get("operation")
+        if operation == 'Cheapest':
             dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
-        elif template == 'shortest':
+        elif operation == 'Shortest':
             # Do function for calulcating shortest one
             dict = get_shortest(flight_type,city1,city2,date_from,date_to)
         else:
             dict = get_closest(flight_type,city1,city2,date_from,date_to)
+        results = dict
         return render_template("results.html", column_names=dict.columns.values,
                     row_data=list(dict.values.tolist()),
                     link_column=["City To","Total Price"],
-                    df=dict,
+                    df=results,
                     zip=zip)
 
 
