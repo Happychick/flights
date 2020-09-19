@@ -1,8 +1,9 @@
 import requests
 # These 2 lines and the last 2 wrap your web page, you put the rest between
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect,jsonify
 # Here we in essence are importing the database
 from database import db_session
+from werkzeug.exceptions import HTTPException
 # Don't have this table now!
 #from models import Location # Get the table schema
 
@@ -215,6 +216,15 @@ def get_closest(flight_type,city1,city2,date_from,date_to=None):
 
     return clean
 
+# Register the error functions
+# You just need to register the error handler, not create a class
+@app.errorhandler(Exception)
+def handle_exception(e):
+    # pass through HTTP errors
+    if isinstance(e, HTTPException):
+        return e
+    # now you're handling non-HTTP exceptions only
+    return render_template("500_generic.html", e=e), 500
 
 # One call is to collect data, the other one posts it
 # First time we say methods, next only method, order doesn't matter
@@ -239,11 +249,13 @@ def index():
         else:
             dict = get_closest(flight_type,city1,city2,date_from,date_to)
         results = dict
+        # We have to add a template for error handling
         return render_template("results.html", column_names=dict.columns.values,
-                    row_data=list(dict.values.tolist()),
-                    link_column=["City To","Total Price"],
-                    df=results,
-                    zip=zip)
+        row_data=list(dict.values.tolist()),
+        link_column=["City To","Total Price"],
+        df=results,
+        zip=zip)
+
 
 
 # This means you are running a program
