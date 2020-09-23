@@ -255,6 +255,7 @@
     border: 0px none rgb(92, 103, 112);
     font: normal normal 400 normal 18px / 30.6px Karla, Arial, Helvetica, sans-serif;
     outline: rgb(92, 103, 112) none 0px;
+    margin:10px;
 }/*#LABEL_12, #LABEL_17, #LABEL_22, #LABEL_27*/
 
 #LABEL_12:after, #LABEL_17:after, #LABEL_22:after, #LABEL_27:after {
@@ -368,7 +369,7 @@
     text-decoration: none solid rgb(39, 45, 58);
     text-size-adjust: 100%;
     vertical-align: middle;
-    width: 512.266px;
+    width: 350px;
     column-rule-color: rgb(39, 45, 58);
     perspective-origin: 256.125px 21.5px;
     transform-origin: 256.125px 21.5px;
@@ -378,6 +379,7 @@
     font: normal normal 400 normal 15px / normal Arial, Helvetica, sans-serif;
     outline: rgb(39, 45, 58) none 0px;
     padding: 0px 15px;
+    margin:10px;
 }/*#INPUT_15, #INPUT_20*/
 
 #INPUT_15:after, #INPUT_20:after {
@@ -423,6 +425,7 @@
     outline: rgb(39, 45, 58) none 0px;
     overflow: hidden;
     padding: 0px 15px;
+    margin:5px
 }/*#INPUT_25, #INPUT_30*/
 
 #INPUT_25:after, #INPUT_30:after {
@@ -516,6 +519,7 @@
     outline: rgb(255, 255, 255) none 0px;
     padding: 13px 29px;
     transition: all 0.2s ease 0s;
+    margin:10px
 }/*#INPUT_32*/
 
 #INPUT_32:after {
@@ -899,6 +903,10 @@ input:readonly {
     background-color: rgb(140, 83, 255);
     border:none;
 }
+
+.offset {
+  margin:15px;
+}
 /*Does button have a border*/
 /*border: none;
 /*color of text in button*/
@@ -946,8 +954,8 @@ input:readonly {
 				</label></span></span></span>
   	</p>
     <p id="P_11">
-        <label id="LABEL_12">
-          Your City, Country (required)<br id="BR_13" /> <span id="SPAN_14"><input type="text" name="city1" size="40" id="INPUT_15"  /></span>
+        <label id="LABEL_12">Your City, Country (required)<br id="BR_13"/><span id="SPAN_14">
+          <input type="text" name="city1" size="40" id="INPUT_15"/></span>
           <span class="error" aria-live="polite"></span>
         </label>
       </p>
@@ -979,7 +987,7 @@ input:readonly {
     </p>
     <p>
       <br id="BR_28" />
-      <div class="btn-group" data-toggle="buttons">
+      <div class="btn-group offset" data-toggle="buttons">
         <label class="btn btn-primary active purple">
           <input type="radio" name="currency" id="option1" value="USD" checked>USD
         </label>
