@@ -15,6 +15,7 @@ app = Flask(__name__)
 import json
 import pandas as pd
 from datetime import datetime
+import time
 from collections import defaultdict
 
 # Set the variable for the API Key that allows us to tie to YOSO
@@ -79,48 +80,74 @@ def get_locations_city(city_from):
 
     return code_id
 
+# Add the new parameters here
+def get_flights(flight_type,loc_params,date_from,date_to=None,currency=None,stop_over=None,dtime_from=None,
+                dtime_to=None,atime_from=None,atime_to=None):
 
-# Get data
-def get_flights(flight_type,city_from,date_from,date_to=None):
+    fl_id= get_locations_city(loc_params)
 
-    city_id = get_locations_city(city_from)
     headers={'accept':'application/json','apikey':apikey}
-    one_for_city = '1'
 
-    #Ensure that date is captured in good formate
-    #dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%y')
-    df = datetime.strptime(date_from, '%Y-%m-%d').strftime('%d/%m/%Y')
+    #Change the date format
+    date_f = datetime.strptime(date_from, '%Y-%m-%d').strftime('%d/%m/%Y')
+
 
     if flight_type =="One-way":
         # Use the code to get the flights
         params = {
-            'flyFrom':city_id, #Use the code from the location match above
-            'dateFrom': df,
-            'dateTo':df,
+            'fly_from':fl_id, #Use the code from the location match above
+            'date_from': date_f,
+            'date_to':date_f,
             'one_for_city':'1',
-            'limit':limit
+            'limit':limit,
+            'curr':currency,
+            #filters
+            'max_stopovers':stop_over,
+            'dtime_from':dtime_from,
+            'dtime_to':dtime_to,
+            'atime_from':atime_from,
+            'atime_to':atime_to
         }
     else:
-        dt = datetime.strptime(date_to, '%Y-%m-%d').strftime('%d/%m/%Y')
+        date_t = datetime.strptime(date_to,'%Y-%m-%d').strftime('%d/%m/%Y')
         params = {
-            'flyFrom':city_id, #Use the code from the location match above
-            'dateFrom': df,
-            'dateTo':df,
-            'return_from':dt,
-            'return_to':dt,
+            'fly_from':fl_id, #Use the code from the location match above
+            'date_from': date_f,
+            'date_to':date_f,
+            'return_from':date_t,
+            'return_to':date_t,
             'flight_type':'round',
-            'sort':'price'
+            #'limit':limit,
+            'sort':'price',
+            'curr':currency,
+            #filters
+            'max_stopovers':stop_over,
+            'dtime_from':dtime_from,
+            'dtime_to':dtime_to,
+            'atime_from':atime_from,
+            'atime_to':atime_to
         }
 
-    #Should add all optimization variables at this stage
-    # Get data
-    resp=requests.get('https://kiwicom-prod.apigee.net/v2/search?', params = params, headers = headers)
+    # Get data, new API with correct data
+    resp=requests.get('https://tequila-api.kiwi.com/v2/search?', params=params,headers=headers)
+
     # Parse json into dictionary
     fl=resp.json()
-    # Put into dataframe
+
     results = pd.DataFrame(fl['data'], columns=['cityFrom','cityTo','deep_link','price'])
 
+    #Adding total duration to the dataframe
+    total_duration = []
+
+    for i in range(len(fl['data'])):
+        total = fl['data'][i]['duration']['total']
+        total_duration.append(total)
+
+    results['duration'] = total_duration
+
+
     return results
+
 
 # This actually extracts the flight prices for each desitnation city
 # Step 2: Add the deeplink for the flight
@@ -151,13 +178,42 @@ def flight_output_table(flight1, flight2):
     # 5.
     return final.sort_values(by='total')
 
+def time_output_table(flight1, flight2):
+    # 1. Get one time per location
+    # 2. Ensure we remove any duplicates in the return results
+    # 3. Combine data sets
+    # 4. Get the total time for the journey and convert it to a legible format
+    # 5. Sort the results
+    # N.B it appears like there are actually are duplicates
+
+    # 1.
+    min_time = flight1.groupby(['cityTo','cityFrom'], as_index=False)['duration'].min()
+    min_time2 = flight2.groupby(['cityTo','cityFrom'], as_index=False)['duration'].min()
+
+    # 2.
+    filtered_f1 = flight1[flight1.duration.isin(min_time['duration'])].drop_duplicates()
+    filtered_f2 = flight2[flight2.duration.isin(min_time2['duration'])].drop_duplicates()
+
+    # 3.
+    final = pd.merge(filtered_f1, filtered_f2[['cityFrom','cityTo','duration','deep_link']], how='inner',on='cityTo', sort=False)
+    # 4.
+    final['total_duration']=final['duration_x'] + final['duration_y']
+    final['total_duration_time'] = [time.strftime("%H:%M", time.gmtime(i)) for i in final['total_duration']]
+
+    # 5.
+    return final.sort_values(by='total_duration')
+
 # Return the result city and price
 # Get full list of results and a pretty dataframe at the end!
-def get_itinerary(flight_type,city1,city2,date_from,date_to=None):
+def get_itinerary(flight_type,city1,city2,date_from,date_to=None,currency=None,stop_over=None,dtime_from=None,
+                dtime_to=None,atime_from=None,atime_to=None,stop_over2=None,dtime_from2=None,
+                dtime_to2=None,atime_from2=None,atime_to2=None):
 
     # Extract user defined info for input
-    flight1=get_flights(flight_type,city1,date_from,date_to)
-    flight2=get_flights(flight_type,city2,date_from,date_to)
+    flight1=get_flights(flight_type,city1,date_from,date_to,currency,stop_over,dtime_from,
+                    dtime_to,atime_from,atime_to)
+    flight2=get_flights(flight_type,city2,date_from,date_to,currency,stop_over2,dtime_from2,
+                    dtime_to2,atime_from2,atime_to2)
     flight_matches = flight_output_table(flight1, flight2)
 
     #Rename columns in output table
@@ -169,17 +225,22 @@ def get_itinerary(flight_type,city1,city2,date_from,date_to=None):
                                    'total':"Total Price"},
                                     inplace=True)
 
-    #Drop unnecessary columns
-    clean = flight_matches.drop(['cityFrom_x', 'cityFrom_y','price_x','price_y'], axis=1)
+    # Drop unnecessary columns
+    # For now I have put duration here, but we can put it back in by using the link column
+    clean = flight_matches.drop(['cityFrom_x', 'cityFrom_y','price_x','price_y','duration'], axis=1)
 
     return clean
 
-def get_shortest(flight_type,city1,city2,date_from,date_to=None):
+def get_shortest(flight_type,city1,city2,date_from,date_to=None,currency=None,stop_over=None,dtime_from=None,
+                dtime_to=None,atime_from=None,atime_to=None,stop_over2=None,dtime_from2=None,
+                                dtime_to2=None,atime_from2=None,atime_to2=None):
 
     # Extract user defined info for input
-    flight1=get_flights(flight_type,city1,date_from,date_to)
-    flight2=get_flights(flight_type,city2,date_from,date_to)
-    flight_matches = flight_output_table(flight1, flight2)
+    flight1=get_flights(flight_type,city1,date_from,date_to,currency,stop_over,dtime_from,
+                    dtime_to,atime_from,atime_to)
+    flight2=get_flights(flight_type,city2,date_from,date_to,currency,stop_over2,dtime_from2,
+                    dtime_to2,atime_from2,atime_to2)
+    flight_matches = time_output_table(flight1, flight2)
 
     #Rename columns in output table
     your_city = flight_matches.cityFrom_x.unique().tolist()
@@ -187,19 +248,22 @@ def get_shortest(flight_type,city1,city2,date_from,date_to=None):
     flight_matches.rename(columns={'deep_link_x':your_city[0],
                                    'deep_link_y':their_city[0],
                                    'cityTo':"City To",
-                                   'total':"Total Length"},
+                                   'total_duration_time':"Total Duration"},
                                     inplace=True)
 
     #Drop unnecessary columns
-    clean = flight_matches.drop(['cityFrom_x', 'cityFrom_y','price_x','price_y'], axis=1)
+    clean = flight_matches.drop(['cityFrom_x', 'cityFrom_y','duration_x','duration_y','price','total_duration'], axis=1)
 
     return clean
 
-def get_closest(flight_type,city1,city2,date_from,date_to=None):
+def get_closest(flight_type,city1,city2,date_from,date_to=None,currency=None,stop_over=None,dtime_from=None,
+                dtime_to=None,atime_from=None,atime_to=None):
 
     # Extract user defined info for input
-    flight1=get_flights(flight_type,city1,date_from,date_to)
-    flight2=get_flights(flight_type,city2,date_from,date_to)
+    flight1=get_flights(flight_type,city1,date_from,date_to,currency,stop_over,dtime_from,
+                    dtime_to,atime_from,atime_to)
+    flight2=get_flights(flight_type,city2,date_from,date_to,currency,stop_over,dtime_from,
+                    dtime_to,atime_from,atime_to)
     flight_matches = flight_output_table(flight1, flight2)
 
     #Rename columns in output table
@@ -240,22 +304,22 @@ def index():
         city2 = request.form['city2']
         date_from = request.form['date_from']
         date_to = request.form['date_to']
+        currency = request.form['currency']
         operation = request.form.get("operation")
         if operation == 'Cheapest':
-            dict = get_itinerary(flight_type,city1,city2,date_from,date_to)
+            dict = get_itinerary(flight_type,city1,city2,date_from,date_to,currency)
         elif operation == 'Shortest':
             # Do function for calulcating shortest one
-            dict = get_shortest(flight_type,city1,city2,date_from,date_to)
+            dict = get_shortest(flight_type,city1,city2,date_from,date_to,currency)
         else:
-            dict = get_closest(flight_type,city1,city2,date_from,date_to)
+            dict = get_closest(flight_type,city1,city2,date_from,date_to,currency)
         results = dict
         # We have to add a template for error handling
         return render_template("results.html", column_names=dict.columns.values,
         row_data=list(dict.values.tolist()),
-        link_column=["City To","Total Price"],
+        link_column=["City To","Total Price","Total Duration"],
         df=results,
         zip=zip)
-
 
 
 # This means you are running a program

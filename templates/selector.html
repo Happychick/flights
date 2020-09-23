@@ -894,12 +894,27 @@ input:readonly {
   background: #dddddd;
 }
 
+/*Color of currency button*/
+.purple {
+    background-color: rgb(140, 83, 255);
+    border:none;
+}
+/*Does button have a border*/
+/*border: none;
+/*color of text in button*/
+/*color: white;
+/*padding around button*/
+/*padding: 15px 32px;*/
+
 </style>
 <head>
  <title> YOSO - You Only Need to Search Once!</title>
  <link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="Stylesheet"></link>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
  <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
  <script src="//code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
 </head>
@@ -937,7 +952,7 @@ input:readonly {
         </label>
       </p>
     <p id="P_16">
-        <label id="LABEL_17">
+        <label id="LABEL_12">
 				Their City, Country (required)<br id="BR_18" /> <span id="SPAN_19"><input type="text" name="city2" required size="40" id="INPUT_20" /></span>
         </label>
     </p>
@@ -953,12 +968,27 @@ input:readonly {
 			</label>
 		</p>
     <p>
+      <label id="LABEL_27">What do you want to do?</label>
       <div class="col-xs-5">
-            <select class="form-control" name="operation">
-            		<option>Cheapest</option>
-          			<option>Shortest</option>
-          			<option>Landing at the same time</option>
-      			</select>
+      <select class="form-control" name="operation">
+      		<option>Cheapest</option>
+    			<option>Shortest</option>
+    			<option>Landing at the same time</option>
+			</select>
+      </div>
+    </p>
+    <p>
+      <br id="BR_28" />
+      <div class="btn-group" data-toggle="buttons">
+        <label class="btn btn-primary active purple">
+          <input type="radio" name="currency" id="option1" value="USD" checked>USD
+        </label>
+        <label class="btn btn-primary purple">
+          <input type="radio" name="currency" id="option2" value="EUR">EUR
+        </label>
+        <label class="btn btn-primary purple">
+          <input type="radio" name="currency" id="option3" value="GBP">GBP
+        </label>
       </div>
       <br id="BR_28" />
     </p>
